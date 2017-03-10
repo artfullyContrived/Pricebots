@@ -49,12 +49,11 @@ def updateTweet ():
         + absolute_change + volume + "$eth #Ethereum"
 
     #prints data to console
-    print "Last tweet sent:"
-    print datetime.datetime.utcnow()
+    print "Last tweet sent:" + str(datetime.datetime.utcnow())
+    print "Just tweeted:\n" +str(tweet)
+    print
 
     #tweets to witter
     api.update_status(tweet)
 
 updateTweet ()
-print "Just tweeted:\n" +str(tweet)
-print
