@@ -4,7 +4,23 @@ import urllib2
 import time
 import json
 from pprint import pprint
+import tweepy, time, sys
 
+#argfile = str(sys.argv[1])
+
+#enter the corresponding information from your Twitter application:
+CONSUMER_KEY = 'your consumer key...'#keep the quotes, replace this with your consumer key
+CONSUMER_SECRET = 'your consumer secret...'#keep the quotes, replace this with your consumer secret key
+ACCESS_KEY = 'your access key...'#keep the quotes, replace this with your access token
+ACCESS_SECRET = 'your access secret...'#keep the quotes, replace this with your access token secret
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
+api = tweepy.API(auth)
+
+
+#for line in f:
+#    api.update_status(line)
+#    time.sleep(900)#Tweet every 15 minutes
 count = 0
 
 #goes through iteration 9 times
@@ -27,23 +43,21 @@ while (count < 9) :
     percentage = percentage * 100
 
     #turns data into string format
-    last = "last: %5.2f" % last
-    high = "high: %5.2f" % high
-    low = "low: %5.2f" % low
-    percentage = "percentage: %%%3.2f" % percentage
-    absolute_change = "absolute_change: %3.2f" % absolute_change
-    volume = "volume: %9.2f" % volume
+    last = "Last: %5.2f\n" % last
+    high = "High: %5.2f\n" % high
+    low = "Low: %5.2f\n" % low
+    percentage = "Percentage: %%%3.2f\n" % percentage
+    absolute_change = "Price Change: %3.2f\n" % absolute_change
+    volume = "Volume: %9.2f\n" % volume
+
+    tweet = "Ethereum price last 24hrs: \n" + last + high + low + percentage \
+        + absolute_change + volume + "$eth #Ethereum"
 
     #prints data to console
-    print last
-    print high
-    print low
-    print percentage
-    print absolute_change
-    print
-
+    print "tweeting..."
+    api.update_status(tweet)
     #bot sleeps for 10 sec
-    time.sleep(10)
+    time.sleep(60)
     count = count + 1
 
 print "All done!"
