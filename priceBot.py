@@ -45,8 +45,8 @@ def updateTweet ():
     volume = "Volume: $%9.2f\n" % volume
 
     #creates string for tweet
-    tweet = "Ethereum price over last 24hrs:\n" + last + high + low + percentage \
-        + absolute_change + volume + "$eth #Ethereum"
+    tweet = "#Eth price last 24hrs:\n" + last + high + low + percentage \
+        + absolute_change + volume + "$eth #Ethereum #coinbase"
 
     #prints data to console
     print "Last tweet sent:" + str(datetime.datetime.utcnow())
