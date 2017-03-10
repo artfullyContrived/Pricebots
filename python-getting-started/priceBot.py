@@ -18,7 +18,7 @@ auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
 def updateTweet ():
-    threading.Timer(60,updateTweet).start()
+    threading.Timer(3600,updateTweet).start()
     #grabs conents from cryptowatch
     contents = \
         urllib2.urlopen("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")\
