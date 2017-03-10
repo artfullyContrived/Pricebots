@@ -1,7 +1,7 @@
 #twitterbot
 #jordan.dwo@gmail.com
 import urllib2
-import time
+import time, datetime
 import json
 from pprint import pprint
 import tweepy, time, sys
@@ -9,10 +9,10 @@ import tweepy, time, sys
 #argfile = str(sys.argv[1])
 
 #enter the corresponding information from your Twitter application:
-CONSUMER_KEY = 'your consumer key...'#keep the quotes, replace this with your consumer key
-CONSUMER_SECRET = 'your consumer secret...'#keep the quotes, replace this with your consumer secret key
-ACCESS_KEY = 'your access key...'#keep the quotes, replace this with your access token
-ACCESS_SECRET = 'your access secret...'#keep the quotes, replace this with your access token secret
+CONSUMER_KEY = 'zQNh4UD3dTfdg6rchdE5WDwXE'#keep the quotes, replace this with your consumer key
+CONSUMER_SECRET = 'vnNCSocmdKBkVvEmExQ6Bi3OlszIXoQxXNgtK2xeuv786cHITQ'#keep the quotes, replace this with your consumer secret key
+ACCESS_KEY = '840062077305724928-3aqfuyj6BuLhFslpkokrFXQjW3rU2dh'#keep the quotes, replace this with your access token
+ACCESS_SECRET = 'NNFzYUSwA6iWBaujUibUzRxgPcQEzzflUo5FaomYS8bE2'#keep the quotes, replace this with your access token secret
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
@@ -43,18 +43,19 @@ while (count < 9) :
     percentage = percentage * 100
 
     #turns data into string format
-    last = "Last: %5.2f\n" % last
-    high = "High: %5.2f\n" % high
-    low = "Low: %5.2f\n" % low
-    percentage = "Percentage: %%%3.2f\n" % percentage
-    absolute_change = "Price Change: %3.2f\n" % absolute_change
-    volume = "Volume: %9.2f\n" % volume
+    last = "Last: $%5.2f\n" % last
+    high = "High: $%5.2f\n" % high
+    low = "Low: $%5.2f\n" % low
+    percentage = "Percentage: %3.2f%%\n" % percentage
+    absolute_change = "Change: $%3.2f\n" % absolute_change
+    volume = "Volume: $%9.2f\n" % volume
 
-    tweet = "Ethereum price last 24hrs: \n" + last + high + low + percentage \
+    tweet = "Ethereum price over last 24hrs:\n" + last + high + low + percentage \
         + absolute_change + volume + "$eth #Ethereum"
 
     #prints data to console
-    print "tweeting..."
+    print "Last tweet sent:"
+    print datetime.datetime.utcnow()
     api.update_status(tweet)
     #bot sleeps for 10 sec
     time.sleep(60)
