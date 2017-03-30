@@ -56,7 +56,7 @@ def updateTweet ():
     print "Just tweeted:\n" +str(tweet)
     print
 
-    #tweets to witter
+    #tweets to twitter
     api.update_status(tweet)
 
 updateTweet ()
