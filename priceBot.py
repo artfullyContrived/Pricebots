@@ -19,8 +19,20 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
+HOUR = 3600
+MINUTE = 60
+EPSILON = MINUTE * 2
+
+now = time.time()
+round(now)
+
+while now % HOUR > EPSILON:
+    now = time.time()
+    round(now)
+    time.sleep(MINUTE / 2)
+
 def updateTweet ():
-    threading.Timer(3600,updateTweet).start()
+    threading.Timer(HOUR,updateTweet).start()
 
     #grabs conents from cryptowatch
     contents = \
@@ -51,8 +63,10 @@ def updateTweet ():
     tweet = "#Eth past 24hrs\n" + last + high + low + percentage \
         + absolute_change + volume + "$eth #Ethereum #coinbase"
 
+    now = datetime.datetime.now()
+
     #prints data to console
-    print "Last tweet sent:" + str(datetime.datetime.utcnow())
+    print "Last tweet sent:" + now.strftime('%Y/%m/%d/ %I:%M:%p')
     print "Just tweeted:\n" +str(tweet)
     print
 
