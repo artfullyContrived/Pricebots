@@ -1,15 +1,11 @@
 #twitterbot
 #jordan.dwo@gmail.com
 import urllib2
-import time, datetime, threading
+import time, datetime, threading, tweepy, sys
 import json
 from pprint import pprint
-import tweepy, time, sys
-
-#argfile = str(sys.argv[1])
 
 #enter the corresponding information from your Twitter application:
-
 #keep the quotes, replace this with your consumer key
 CONSUMER_KEY = 'your key...'
 #keep the quotes, replace this with your consumer secret key
@@ -25,6 +21,7 @@ api = tweepy.API(auth)
 
 def updateTweet ():
     threading.Timer(3600,updateTweet).start()
+
     #grabs conents from cryptowatch
     contents = \
         urllib2.urlopen("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")\
@@ -46,12 +43,12 @@ def updateTweet ():
     last = "Last: $%5.2f\n" % last
     high = "High: $%5.2f\n" % high
     low = "Low: $%5.2f\n" % low
-    percentage = "Percentage: %3.2f%%\n" % percentage
-    absolute_change = "Change: $%3.2f\n" % absolute_change
+    percentage = "Change: %3.2f%%" % percentage
+    absolute_change = " | $%3.2f\n" % absolute_change
     volume = "Volume: $%9.2f\n" % volume
 
     #creates string for tweet
-    tweet = "#Eth price last 24hrs:\n" + last + high + low + percentage \
+    tweet = "#Eth past 24hrs\n" + last + high + low + percentage \
         + absolute_change + volume + "$eth #Ethereum #coinbase"
 
     #prints data to console
