@@ -6,8 +6,6 @@ import json
 from pprint import pprint
 import tweepy, time, sys
 
-#argfile = str(sys.argv[1])
-
 #enter the corresponding information from your Twitter application:
 
 #keep the quotes, replace this with your consumer key
@@ -23,8 +21,20 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
+HOUR = 3600
+MINUTE = 60
+EPSILON = MINUTE * 2
+
+now = time.time()
+round(now)
+
+while now % HOUR > EPSILON:
+    now = time.time()
+    round(now)
+    time.sleep(MINUTE / 2)
+
 def updateTweet ():
-    threading.Timer(3600,updateTweet).start()
+    threading.Timer(MINUTE,updateTweet).start()
     #grabs conents from cryptowatch
     contents = \
         urllib2.urlopen("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")\
@@ -54,8 +64,10 @@ def updateTweet ():
     tweet = "#Eth price last 24hrs:\n" + last + high + low + percentage \
         + absolute_change + volume + "$eth #Ethereum #coinbase"
 
+    now = datetime.datetime.now()
+
     #prints data to console
-    print "Last tweet sent:" + str(datetime.datetime.utcnow())
+    print "Last tweet sent:" + now.strftime('%Y/%m/%d/ %I:%M:%p')
     print "Just tweeted:\n" +str(tweet)
     print
 
