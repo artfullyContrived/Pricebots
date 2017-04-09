@@ -34,7 +34,7 @@ while now % HOUR > EPSILON:
 def updateTweet ():
     threading.Timer(HOUR,updateTweet).start()
 
-    #grabs conents from cryptowatch
+    #grabs contents from cryptowatch
     contents = \
         urllib2.urlopen("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")\
         .read()
@@ -60,7 +60,7 @@ def updateTweet ():
     volume = "Volume: $%9.2f\n" % volume
 
     #creates string for tweet
-    tweet = "#Eth past 24hrs\n" + last + high + low + percentage \
+    tweet = "#Eth 24hr Summary:\n" + last + high + low + percentage \
         + absolute_change + volume + "$eth #Ethereum #coinbase"
 
     now = datetime.datetime.now()
