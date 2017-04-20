@@ -16,8 +16,6 @@ If you would like to contribute to EthPriceBot you are encouraged to submit issu
 
 You can join the discussion [here!](https://waffle.io/JordanDworaczyk/EthPriceBot/join)
 
----
-
 # Donate
 All gratiuty currently goes to the project curator, Jordan Dworaczyk, and is greatly appreciated. 
 
@@ -30,6 +28,8 @@ BTC: 17zW4oJXYLTc2Aw77RBgfaCbsfpPXFzmYK
 Paypal: jordan.dwo@gmail.com
 
 ```
+
+---
 
 Feel free to follow @EthPriceBot on twitter for 24hr market summaries!
 [![Twitter Follow](https://img.shields.io/twitter/follow/EthPriceBot.svg?style=social&label=Follow)](https://twitter.com/EthPriceBot)
