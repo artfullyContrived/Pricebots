@@ -6,22 +6,19 @@ EthPriceBot is written for python2.7 and uses tweepy as a dependency.
 
 
 
-### Issues that are currently being worked on.  
+# Contribute 
+See issues that are currently being worked on!   
 
-###### Stories in the Ready
-[![Stories in Ready](https://badge.waffle.io/JordanDworaczyk/EthPriceBot.png?label=ready&title=Ready)](https://waffle.io/JordanDworaczyk/EthPriceBot)
-###### Stories in Progress
-[![Waffle.io](https://img.shields.io/waffle/label/JordanDworaczyk/EthPriceBot/in%20progress.svg)](https://waffle.io/JordanDworaczyk/EthPriceBot)
+### Stories in the [![Stories in Ready](https://badge.waffle.io/JordanDworaczyk/EthPriceBot.png?label=ready&title=Ready)](https://waffle.io/JordanDworaczyk/EthPriceBot)
+### Stories [![Waffle.io](https://img.shields.io/waffle/label/JordanDworaczyk/EthPriceBot/in%20progress.svg)](https://waffle.io/JordanDworaczyk/EthPriceBot)
 
----
-
-### Collaboration
 If you would like to contribute to EthPriceBot you are encouraged to submit issues, pull requests, and to comment and take part in discussions. 
 
-You can join the project [here!](https://waffle.io/JordanDworaczyk/EthPriceBot/join)
+You can join the discussion [here!](https://waffle.io/JordanDworaczyk/EthPriceBot/join)
 
 ---
 
+# Donate
 All gratiuty currently goes to the project curator, Jordan Dworaczyk, and is greatly appreciated. 
 
 ```
