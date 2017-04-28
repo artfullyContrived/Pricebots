@@ -19,26 +19,134 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
+import plotly.offline as offline
+import plotly.graph_objs as go
+import requests
+import datetime, time
+import os
+
+WEEK = 604800
+DAY = 86400
+HOUR = 3600
 HOUR = 3600
 MINUTE = 60
 EPSILON = MINUTE * 2
 
+cwd = os.getcwd()
+
+def plotTweet():
+    # for getting interval of OHLC data from cyrptowatch
+    now =  int(time.time())
+    date = int(time.time() - WEEK)
+
+    # prints out to console
+    print "Last week:  %9.0f" % date
+    print datetime.datetime.fromtimestamp(date).strftime('%Y-%m-%d %H:%M:%S')
+    print "\nNow: %9.0f" % now
+    print datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d %H:%M:%S')
+    print
+
+    # parameters for grabbing specific content form cyrptowatch
+    params = {'after': date, 'before': now, 'periods': HOUR}
+
+    # grabs OHCL contents from cryptowatch
+    r = requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/ohlc",
+                    params=params)
+    data = r.json()
+
+    # puts json data into list with each element being a candle
+    data = data['result'][str(HOUR)]
+
+    # initializing lists for OHCL data
+    dates = list()
+    open_data = list()
+    high_data = list()
+    low_data = list()
+    close_data = list()
+    volume_data = list()
+
+    # reading data form each candle into OHCL lists
+    for candle in data:
+        #puts day for each candle into datetime for plotting
+        day = candle[0]
+        day = datetime.datetime.fromtimestamp(day).strftime('%Y-%m-%d %H:%M:%S')
+        dates.append(day)
+
+        open_data.append(candle[1])
+        high_data.append(candle[2])
+        low_data.append(candle[3])
+        close_data.append(candle[4])
+        volume_data.append(candle[5])
+
+
+    # traces the data for plot
+    trace = go.Candlestick(x=dates,
+                           open=open_data,
+                           high=high_data,
+                           low=low_data,
+                           close=close_data,
+                           name='',
+                           increasing=dict(line=dict(color= '#19cf86')),
+                           decreasing=dict(line=dict(color= '#cf1962'))
+                           )
+
+    data = [trace]
+
+    # attributes for plot
+    layout = go.Layout(
+    title='Ethereum Price',
+    titlefont=dict(
+        family='Courier New, monospace',
+        size=34,
+        color='#7f7f7f'
+        )
+    ,
+    xaxis=dict(
+        rangeslider=dict(
+            visible=False
+        ),
+        title='Past Seven Days',
+        titlefont=dict(
+            family='Courier New, monospace',
+            size=24,
+            color='#7f7f7f'
+        )
+    ),
+    yaxis=dict(
+        title='Price in USD',
+        titlefont=dict(
+            family='Courier New, monospace',
+            size=24,
+            color='#7f7f7f'
+        )
+    ),
+    paper_bgcolor= '#f5e6d1',
+    plot_bgcolor= '#f5e6d1'
+)
+
+    # combines data and layout into figure
+    fig = go.Figure(data=data, layout=layout)
+
+    # plots figure
+    offline.plot(fig, image='png',image_filename='plot',auto_open=True)
+
+
 now = time.time()
 round(now)
 
+#forces tweet to initiate on the hour
 while now % HOUR > EPSILON:
     now = time.time()
     round(now)
     time.sleep(MINUTE / 2)
 
 def updateTweet ():
-    threading.Timer(HOUR,updateTweet).start()
+    #after tweet has been initiated it will start every hour again
+    threading.Timer(HOUR, updateTweet).start()
 
     #grabs contents from cryptowatch
-    contents = \
-        urllib2.urlopen("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")\
-        .read()
-    data = json.loads(contents)
+    r=requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")
+    data = r.json()
 
     #finds data in contents
     last = data['result']['price']['last']
@@ -71,6 +179,16 @@ def updateTweet ():
     print
 
     #tweets to twitter
-    api.update_status(tweet)
+    #api.update_status(tweet)
+    #plots tweet, saves as html, saves pic of tweet into downloads folder
+    plotTweet()
+    #sleeps to allow time for tweet to be downloaded into folder
+    time.sleep(15)
+    #updates twitter with picture and tweet status
+    api.update_with_media('C:\Users\jdwor\Downloads\plot.png', status=tweet)
+    # removes picture from file after tweeted
+    os.remove('C:\Users\jdwor\Downloads\plot.png')
 
+
+#calls update again to run until program is exited out
 updateTweet ()
