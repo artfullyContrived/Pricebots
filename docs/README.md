@@ -2,7 +2,7 @@
 Pulls price information from coinbase using cryptowatch API, then uses tweepy to update twitter post every hour. 
 
 **Note:**
-EthPriceBot is written for python2.7 and uses tweepy as a dependency. 
+Plotly and Tweepy are required to run the bot. Install usiing `pip` for Python2.7. 
 
 
 
