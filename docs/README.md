@@ -28,5 +28,5 @@ Paypal: jordan.dwo@gmail.com
 
 ---
 
-Feel free to follow @EthPriceBot on twitter for 24hr market summaries!
+Feel free to follow [@EthPriceBot](https://twitter.com/EthPriceBot) on twitter for 24hr market summaries!
 [![Twitter Follow](https://img.shields.io/twitter/follow/EthPriceBot.svg?style=social&label=Follow)](https://twitter.com/EthPriceBot)
