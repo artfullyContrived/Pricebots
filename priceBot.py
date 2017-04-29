@@ -24,7 +24,6 @@ api = tweepy.API(auth)
 WEEK = 604800
 DAY = 86400
 HOUR = 3600
-HOUR = 3600
 MINUTE = 60
 EPSILON = MINUTE * 2
 
@@ -32,11 +31,13 @@ EPSILON = MINUTE * 2
 name = os.name
 #creates download_folder's path based of os
 if name == 'nt':
+    print 'Operating System is Windows.'
     download_folder = os.path.expanduser('~')+'\Downloads\\'
-    print download_folder
+    print 'Downloads folder is '+ download_folder
 else:
+    print 'Operating System is Linux'
     download_folder = os.path.expanduser('~')+'/Downloads/'
-    print download_folder
+    print 'Downloads folder is '+download_folder
 
 def plotTweet():
     # for getting interval of OHLC data from cyrptowatch
@@ -135,18 +136,21 @@ def plotTweet():
     offline.plot(fig, image='png',image_filename='plot',auto_open=True)
 
 
-now = time.time()
-round(now)
 
 #forces tweet to initiate on the hour
+now = time.time()
+round(now)
 while now % HOUR > EPSILON:
+    print 'Waiting to tweet.'
     now = time.time()
     round(now)
     time.sleep(MINUTE / 2)
 
 def updateTweet ():
     #after tweet has been initiated it will start every hour again
+    print 'Sleeping...'
     threading.Timer(HOUR, updateTweet).start()
+    print 'updating tweet.'
 
     #grabs contents from cryptowatch
     r=requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")
@@ -177,11 +181,6 @@ def updateTweet ():
 
     now = datetime.datetime.now()
 
-    #prints data to console
-    print "Last tweet sent:" + now.strftime('%Y/%m/%d/ %I:%M:%p')
-    print "Just tweeted:\n" +str(tweet)
-    print
-
     #calls plot function
     plotTweet()
     #sleeps to allow time for plot.png to be downloaded into folder
@@ -190,6 +189,11 @@ def updateTweet ():
     api.update_with_media(download_folder+'plot.png', status=tweet)
     # removes picture from file after tweeted
     os.remove(download_folder+'plot.png')
+
+    #prints data to console
+    print "Last tweet sent:" + now.strftime('%Y/%m/%d/ %I:%M:%p')
+    print "Just tweeted:\n" +str(tweet)
+    print
 
 
 #calls update again to run until program is exited out
