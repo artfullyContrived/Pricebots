@@ -28,10 +28,9 @@ HOUR = 3600
 MINUTE = 60
 EPSILON = MINUTE * 2
 
-#finds download folder's directory
-cwd = os.getcwd()
-print cwd
+#finds users operating system
 name = os.name
+#creates download_folder's path based of os
 if name == 'nt':
     download_folder = os.path.expanduser('~')+'\Downloads\\'
     print download_folder
