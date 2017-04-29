@@ -98,36 +98,37 @@ def plotTweet():
     data = [trace]
 
     # attributes for plot
-    layout = go.Layout(
-    title='Ethereum Price',
-    titlefont=dict(
-        family='Courier New, monospace',
-        size=34,
-        color='#7f7f7f'
-        )
-    ,
-    xaxis=dict(
-        rangeslider=dict(
-            visible=False
+    layout = \
+        go.Layout(
+        title='Ethereum Price',
+        titlefont=dict(
+            family='Courier New, monospace',
+            size=34,
+            color='#7f7f7f'
+            )
+        ,
+        xaxis=dict(
+            rangeslider=dict(
+                visible=False
+            ),
+            title='Past Seven Days',
+            titlefont=dict(
+                family='Courier New, monospace',
+                size=24,
+                color='#7f7f7f'
+            )
         ),
-        title='Past Seven Days',
-        titlefont=dict(
-            family='Courier New, monospace',
-            size=24,
-            color='#7f7f7f'
+        yaxis=dict(
+            title='Price in USD',
+            titlefont=dict(
+                family='Courier New, monospace',
+                size=24,
+                color='#7f7f7f'
+            )
+        ),
+        paper_bgcolor= '#f5e6d1',
+        plot_bgcolor= '#f5e6d1'
         )
-    ),
-    yaxis=dict(
-        title='Price in USD',
-        titlefont=dict(
-            family='Courier New, monospace',
-            size=24,
-            color='#7f7f7f'
-        )
-    ),
-    paper_bgcolor= '#f5e6d1',
-    plot_bgcolor= '#f5e6d1'
-)
 
     # combines data and layout into figure
     fig = go.Figure(data=data, layout=layout)
