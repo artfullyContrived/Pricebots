@@ -1,9 +1,11 @@
 #twitterbot
 #jordan.dwo@gmail.com
-import urllib2
+import requests
 import time, datetime, threading, tweepy, sys
 import json
-from pprint import pprint
+import plotly.offline as offline
+import plotly.graph_objs as go
+import os
 
 #enter the corresponding information from your Twitter application:
 #keep the quotes, replace this with your consumer key
@@ -19,12 +21,6 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-import plotly.offline as offline
-import plotly.graph_objs as go
-import requests
-import datetime, time
-import os
-
 WEEK = 604800
 DAY = 86400
 HOUR = 3600
@@ -32,7 +28,16 @@ HOUR = 3600
 MINUTE = 60
 EPSILON = MINUTE * 2
 
+#finds download folder's directory
 cwd = os.getcwd()
+print cwd
+name = os.name
+if name == 'nt':
+    download_folder = os.path.expanduser('~')+'\Downloads\\'
+    print download_folder
+else:
+    download_folder = os.path.expanduser('~')+'/Downloads/'
+    print download_folder
 
 def plotTweet():
     # for getting interval of OHLC data from cyrptowatch
@@ -127,7 +132,7 @@ def plotTweet():
     # combines data and layout into figure
     fig = go.Figure(data=data, layout=layout)
 
-    # plots figure
+    #plots figure, saves as html, saves pic of tweet into downloads folder
     offline.plot(fig, image='png',image_filename='plot',auto_open=True)
 
 
@@ -178,16 +183,14 @@ def updateTweet ():
     print "Just tweeted:\n" +str(tweet)
     print
 
-    #tweets to twitter
-    #api.update_status(tweet)
-    #plots tweet, saves as html, saves pic of tweet into downloads folder
+    #calls plot function
     plotTweet()
-    #sleeps to allow time for tweet to be downloaded into folder
+    #sleeps to allow time for plot.png to be downloaded into folder
     time.sleep(15)
-    #updates twitter with picture and tweet status
-    api.update_with_media('C:\Users\jdwor\Downloads\plot.png', status=tweet)
+    #tweets to twitter with picture and tweet status
+    api.update_with_media(download_folder+'plot.png', status=tweet)
     # removes picture from file after tweeted
-    os.remove('C:\Users\jdwor\Downloads\plot.png')
+    os.remove(download_folder+'plot.png')
 
 
 #calls update again to run until program is exited out
