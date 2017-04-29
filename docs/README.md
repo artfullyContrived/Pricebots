@@ -9,7 +9,7 @@ EthPriceBot is written for python2.7 and uses tweepy as a dependency.
 # How to Contribute 
 See issues and user stories that are currently being worked on. 
 
-[![Throughput Graph](https://graphs.waffle.io/Mikadily/JordanDworaczyk/EthPriceBot/throughput.svg)](https://waffle.io/JordanDworaczyk/EthPriceBot/)
+[![Throughput Graph](https://graphs.waffle.io/JordanDworaczyk/EthPriceBot/throughput.svg)](https://waffle.io/JordanDworaczyk/EthPriceBot/)
 
 If you would like to contribute to EthPriceBot you are encouraged to submit issues, pull requests, and to comment and take part in discussions. 
 
