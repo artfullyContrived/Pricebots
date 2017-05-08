@@ -7,13 +7,13 @@ Plotly and Tweepy are required to run the bot. Install usiing `pip` for Python2.
 
 
 # How to Contribute 
-If you would like to contribute to BTCPriceBot you are encouraged to submit issues, pull requests, and to comment and take part in discussions. 
+If you would like to contribute to EthPriceBot you are encouraged to submit issues, pull requests, and to comment and take part in discussions. 
 
 See Workflow management with Waffle.io
 
-[![Throughput Graph](https://graphs.waffle.io/JordanDworaczyk/BTCPriceBot/throughput.svg)](https://waffle.io/JordanDworaczyk/BTCPriceBot/)
+[![Throughput Graph](https://graphs.waffle.io/JordanDworaczyk/EthPriceBot/throughput.svg)](https://waffle.io/JordanDworaczyk/EthPriceBot/)
 
-You can join and take part in discussions [here!](https://waffle.io/JordanDworaczyk/BTCPriceBot/join)
+You can join and take part in discussions [here!](https://waffle.io/JordanDworaczyk/EthPriceBot/join)
 
 # Donate
 All gratiuty currently goes to the project curator, Jordan Dworaczyk, and is greatly appreciated. 
@@ -30,5 +30,5 @@ Paypal: jordan.dwo@gmail.com
 
 ---
 
-Feel free to follow [@BTCPriceBot](https://twitter.com/BTCPriceBot) on twitter for 24hr market summaries!
-[![Twitter Follow](https://img.shields.io/twitter/follow/BTCPRiceBot.svg?style=social&label=Follow)](https://twitter.com/BTCPriceBot)
+Feel free to follow [@EthPriceBot](https://twitter.com/EthPriceBot) on twitter for 24hr market summaries!
+[![Twitter Follow](https://img.shields.io/twitter/follow/EthPriceBot.svg?style=social&label=Follow)](https://twitter.com/EthPriceBot)
