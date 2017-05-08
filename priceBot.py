@@ -119,16 +119,18 @@ def plotTweet():
             )
         ),
         yaxis=dict(
-            title='Price in USD',
+            title='USD',
             titlefont=dict(
                 family='Courier New, monospace',
                 size=24,
                 color='#7f7f7f'
-            )
+            ),
+            side='right',
         ),
         paper_bgcolor= '#f5e6d1',
-        plot_bgcolor= '#f5e6d1'
-        )
+        plot_bgcolor= '#f5e6d1',
+        legend=dict(orientation='h')
+    )
 
     # combines data and layout into figure
     fig = go.Figure(data=data, layout=layout)
