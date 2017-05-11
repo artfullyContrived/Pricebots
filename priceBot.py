@@ -127,15 +127,18 @@ def plotTweet():
                 color='#7f7f7f'
             ),
             side='right',
+            #showticklabels=True, tick0=0, tickwidth=1,
+            #linecolor='#7f7f7f', linewidth=0
         ),
         paper_bgcolor= '#f5e6d1',
         plot_bgcolor= '#f5e6d1',
         legend=dict(orientation='h'),
         images=[dict(
-            source= 'watermark.png',
+            source= 'https://raw.githubusercontent.com/JordanDworaczyk/EthPriceBot/Issue-%2315/watermark.png',
             xref='paper', yref='paper',
             x=0, y=1,
-            sizex=0.2, sizey=0.2,
+            sizex=0.075, sizey=0.075,
+            opacity=0.1,
             xanchor='left', yanchor='bottom'
         )]
     )
