@@ -1,8 +1,8 @@
 # How it works
-Pulls price information from coinbase using cryptowatch API, then uses tweepy to update twitter post every hour. 
+Pulls price information from [coinbase](https://www.coinbase.com) via [crytowat.ch](https://cryptowat.ch/coinbase/ethusd/1d), then uses [tweepy](https://github.com/tweepy/tweepy) to make a twitter post every hour. 
 
 **Note:**
-Plotly and Tweepy are required to run the bot. Install usiing `pip` for Python2.7. 
+Plotly and Tweepy are required to run the bot. Install using `pip` for Python2.7. 
 
 
 
