@@ -1,4 +1,5 @@
 # How it works
+
 EthPriceBot is a twitterbot that pulls price information from
 [coinbase](https://www.coinbase.com) via
 [cryptowat.ch](https://cryptowat.ch/coinbase/ethusd/1d). It then uses
