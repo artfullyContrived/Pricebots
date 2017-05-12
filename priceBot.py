@@ -11,11 +11,11 @@ import os
 #keep the quotes, replace this with your consumer key
 CONSUMER_KEY = 'your key...'
 #keep the quotes, replace this with your consumer secret key
-CONSUMER_SECRET = 'your secret...'
+CONSUMER_SECRET = 'your key...'
 #keep the quotes, replace this with your access token
 ACCESS_KEY = 'your key...'
 #keep the quotes, replace this with your access token secret
-ACCESS_SECRET = 'your secret...'
+ACCESS_SECRET = 'your key...'
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -90,12 +90,13 @@ def plotTweet():
                            high=high_data,
                            low=low_data,
                            close=close_data,
-                           increasing=dict(name='Hourly Increase',
-                                line=dict(color= '#19cf86')),
-                           decreasing=dict(name='Hourly Decrease',
-                               line=dict(color= '#cf1962'))
+                           increasing=dict(name='<i>Bullish Hour</i>',
+                                line=dict(color= '#19cf86')
+                                ),
+                           decreasing=dict(name='<i>Bearesh Hour</i>',
+                               line=dict(color= '#cf1962')
+                               )
                            )
-
     data = [trace]
 
     # attributes for plot
@@ -132,14 +133,22 @@ def plotTweet():
         ),
         paper_bgcolor= '#f5e6d1',
         plot_bgcolor= '#f5e6d1',
-        legend=dict(orientation='h'),
+        legend = dict(
+            x = -.1,
+            y = -.25,
+            font=dict(
+                family='Courier New, monospace',
+                size=12,
+                color='#7f7f7f'
+            ),
+        ),
         images=[dict(
             source= 'https://raw.githubusercontent.com/JordanDworaczyk/EthPriceBot/Issue-%2315/watermark.png',
             xref='paper', yref='paper',
-            x=0, y=-.2,
-            sizex=0.075, sizey=0.075,
+            x=.95, y=-.4,
+            sizex=0.2, sizey=0.2,
             opacity=0.1,
-            xanchor='right', yanchor='bottom'
+            xanchor='left', yanchor='bottom'
         )]
     )
     print cwd
