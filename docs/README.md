@@ -1,13 +1,14 @@
 # How it works
-Pulls price information from [coinbase](https://www.coinbase.com) via [crytowat.ch](https://cryptowat.ch/coinbase/ethusd/1d), then uses [tweepy](https://github.com/tweepy/tweepy) to make a twitter post every hour. 
 
-**Note:**
-Plotly and Tweepy are required to run the bot. Install using `pip` for Python2.7. 
+EthPriceBot is a twitterbot that pulls price information from
+[coinbase](https://www.coinbase.com) via
+[cryptowat.ch](https://cryptowat.ch/coinbase/ethusd/1d). It then uses
+[plotly](https://plot.ly/python/) to plot the price data and save it as a
+picture to be tweeted by [tweepy](https://github.com/tweepy/tweepy) every hour.
 
-
-
-# How to Contribute 
-If you would like to contribute to EthPriceBot you are encouraged to submit issues, pull requests, and to comment and take part in discussions. 
+# Contributing
+If you would like to contribute to EthPriceBot you are encouraged to submit
+issues, pull requests, and to comment and take part in discussions.
 
 See Workflow management with Waffle.io
 
@@ -16,7 +17,7 @@ See Workflow management with Waffle.io
 You can join and take part in discussions [here!](https://waffle.io/JordanDworaczyk/EthPriceBot/join)
 
 # Donate
-All gratiuty currently goes to the project curator, Jordan Dworaczyk, and is greatly appreciated. 
+All gratiuty currently goes to the project curator, Jordan Dworaczyk, and is greatly appreciated.
 
 ```
 
