@@ -90,9 +90,10 @@ def plotTweet():
                            high=high_data,
                            low=low_data,
                            close=close_data,
-                           name='',
-                           increasing=dict(line=dict(color= '#19cf86')),
-                           decreasing=dict(line=dict(color= '#cf1962'))
+                           increasing=dict(name='Hourly Increase',
+                                line=dict(color= '#19cf86')),
+                           decreasing=dict(name='Hourly Decrease',
+                               line=dict(color= '#cf1962'))
                            )
 
     data = [trace]
@@ -112,7 +113,8 @@ def plotTweet():
             rangeslider=dict(
                 visible=False
             ),
-            title='Past Seven Days (UTC Time)',
+            title='Past Seven Days (UTC Time)<br>',
+            showgrid= True,
             titlefont=dict(
                 family='Courier New, monospace',
                 size=24,
@@ -126,9 +128,7 @@ def plotTweet():
                 size=24,
                 color='#7f7f7f'
             ),
-            side='right',
-            #showticklabels=True, tick0=0, tickwidth=1,
-            #linecolor='#7f7f7f', linewidth=0
+            side='right'
         ),
         paper_bgcolor= '#f5e6d1',
         plot_bgcolor= '#f5e6d1',
@@ -136,13 +136,12 @@ def plotTweet():
         images=[dict(
             source= 'https://raw.githubusercontent.com/JordanDworaczyk/EthPriceBot/Issue-%2315/watermark.png',
             xref='paper', yref='paper',
-            x=0, y=1,
+            x=0, y=-.2,
             sizex=0.075, sizey=0.075,
             opacity=0.1,
-            xanchor='left', yanchor='bottom'
+            xanchor='right', yanchor='bottom'
         )]
     )
-#C:\Users\jdwor\Documents\GitHub\EthPriceBot\watermark.png
     print cwd
     # combines data and layout into figure
     fig = go.Figure(data=data, layout=layout)
@@ -155,7 +154,7 @@ def plotTweet():
 #forces tweet to initiate on the hour
 now = time.time()
 round(now)
-while now % MINUTE > EPSILON:
+while now % HOUR > EPSILON:
     print 'Waiting to tweet.'
     now = time.time()
     round(now)
@@ -201,7 +200,7 @@ def updateTweet ():
     #sleeps to allow time for plot.png to be downloaded into folder
     time.sleep(15)
     #tweets to twitter with picture and tweet status
-    #api.update_with_media(download_folder+'plot.png', status=tweet)
+    api.update_with_media(download_folder+'plot.png', status=tweet)
     # removes picture from file after tweeted
     os.remove(download_folder+'plot.png')
 
