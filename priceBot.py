@@ -10,13 +10,13 @@ from subprocess import Popen
 
 #enter the corresponding information from your Twitter application:
 #keep the quotes, replace this with your consumer key
-CONSUMER_KEY = 'WMKa5ds20Y5BmUcQz8o3oLslD'
+CONSUMER_KEY = 'secret...'
 #keep the quotes, replace this with your consumer secret key
-CONSUMER_SECRET = 'Z0UIFrva46quzUwM3OtRY3vJ80L2VVLtReuRB9WwPFvv4PWtcG'
+CONSUMER_SECRET = 'secret...'
 #keep the quotes, replace this with your access token
-ACCESS_KEY = '1523923351-08dEkDOkfjxZ31M8RBQy40eqdV9JicMD6NEQ7VJ'
+ACCESS_KEY = 'secret...'
 #keep the quotes, replace this with your access token secret
-ACCESS_SECRET = 'Cddg3NwALTFHAvqrF3UIYDX9VyWqCBKHkX0cS1WGE9o2h'
+ACCESS_SECRET = 'secret...'
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -164,7 +164,7 @@ def plotTweet():
 #forces tweet to initiate on the hour
 now = time.time()
 round(now)
-while now % MINUTE > EPSILON:
+while now % HOUR > EPSILON:
     print 'Waiting to tweet.'
     now = time.time()
     round(now)
