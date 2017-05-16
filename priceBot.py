@@ -6,16 +6,17 @@ import json
 import plotly.offline as offline
 import plotly.graph_objs as go
 import os
+from subprocess import Popen
 
 #enter the corresponding information from your Twitter application:
 #keep the quotes, replace this with your consumer key
-CONSUMER_KEY = 'your key...'
+CONSUMER_KEY = 'WMKa5ds20Y5BmUcQz8o3oLslD'
 #keep the quotes, replace this with your consumer secret key
-CONSUMER_SECRET = 'your key...'
+CONSUMER_SECRET = 'Z0UIFrva46quzUwM3OtRY3vJ80L2VVLtReuRB9WwPFvv4PWtcG'
 #keep the quotes, replace this with your access token
-ACCESS_KEY = 'your key...'
+ACCESS_KEY = '1523923351-08dEkDOkfjxZ31M8RBQy40eqdV9JicMD6NEQ7VJ'
 #keep the quotes, replace this with your access token secret
-ACCESS_SECRET = 'your key...'
+ACCESS_SECRET = 'Cddg3NwALTFHAvqrF3UIYDX9VyWqCBKHkX0cS1WGE9o2h'
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -163,7 +164,7 @@ def plotTweet():
 #forces tweet to initiate on the hour
 now = time.time()
 round(now)
-while now % HOUR > EPSILON:
+while now % MINUTE > EPSILON:
     print 'Waiting to tweet.'
     now = time.time()
     round(now)
@@ -174,6 +175,9 @@ def updateTweet ():
     print 'Sleeping...'
     threading.Timer(HOUR, updateTweet).start()
     print 'updating tweet.'
+
+    #clears chrome window to avoid openning too many tabs and crashing system
+    Popen('taskkill /F /IM chrome.exe', shell=True)
 
     #grabs contents from cryptowatch
     r=requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")
