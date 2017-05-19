@@ -6,16 +6,17 @@ import json
 import plotly.offline as offline
 import plotly.graph_objs as go
 import os
+from subprocess import Popen
 
 #enter the corresponding information from your Twitter application:
 #keep the quotes, replace this with your consumer key
-CONSUMER_KEY = 'your key...'
+CONSUMER_KEY = 'secret...'
 #keep the quotes, replace this with your consumer secret key
-CONSUMER_SECRET = 'your key...'
+CONSUMER_SECRET = 'secret...'
 #keep the quotes, replace this with your access token
-ACCESS_KEY = 'your key...'
+ACCESS_KEY = 'secret...'
 #keep the quotes, replace this with your access token secret
-ACCESS_SECRET = 'your key...'
+ACCESS_SECRET = 'secret...'
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -174,6 +175,9 @@ def updateTweet ():
     print 'Sleeping...'
     threading.Timer(HOUR, updateTweet).start()
     print 'updating tweet.'
+
+    #clears chrome window to avoid openning too many tabs and crashing system
+    Popen('taskkill /F /IM chrome.exe', shell=True)
 
     #grabs contents from cryptowatch
     r=requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")
