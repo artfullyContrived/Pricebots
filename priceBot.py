@@ -210,8 +210,13 @@ def updateTweet ():
 
     #calls plot function
     plotTweet()
+
     #sleeps to allow time for plot.png to be downloaded into folder
-    time.sleep(15)
+    while os.path.exists( download_folder + 'plot.png' ) == False:
+        print 'Picture of chart is not yet downloaded'
+        time.sleep(5)
+    print 'Picture of chart has been downloaded'
+
     #tweets to twitter with picture and tweet status
     api.update_with_media(download_folder+'plot.png', status=tweet)
     # removes picture from file after tweeted
