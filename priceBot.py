@@ -94,7 +94,7 @@ def plotTweet():
                            increasing=dict(name='<i>Bullish Hour</i>',
                                 line=dict(color= '#19cf86')
                                 ),
-                           decreasing=dict(name='<i>Bearesh Hour</i>',
+                           decreasing=dict(name='<i>Bearish Hour</i>',
                                line=dict(color= '#cf1962')
                                )
                            )
