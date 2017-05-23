@@ -35,10 +35,14 @@ if name == 'nt':
     print 'Operating System is Windows.'
     download_folder = os.path.expanduser('~')+'\Downloads\\'
     print 'Downloads folder is '+ download_folder
+    browser = 'chrome.exe'
+    print browser
 else:
     print 'Operating System is Linux'
     download_folder = os.path.expanduser('~')+'/Downloads/'
     print 'Downloads folder is '+download_folder
+    browser = 'chromium-browser'
+    print browser
 
 def plotTweet():
     # for getting interval of OHLC data from cyrptowatch
@@ -177,7 +181,7 @@ def updateTweet ():
     print 'updating tweet.'
 
     #clears chrome window to avoid openning too many tabs and crashing system
-    Popen('taskkill /F /IM chrome.exe', shell=True)
+    Popen('taskkill /F /IM ' + browser, shell=True)
 
     #grabs contents from cryptowatch
     r=requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")
