@@ -144,7 +144,7 @@ def plotTweet():
             ),
         ),
         images=[dict(
-            source= 'https://raw.githubusercontent.com/JordanDworaczyk/EthPriceBot/Issue-%2315/watermark.png',
+            source= 'https://raw.githubusercontent.com/JordanDworaczyk/EthPriceBot/master/watermark.png',
             xref='paper', yref='paper',
             x=.95, y=-.4,
             sizex=0.2, sizey=0.2,
