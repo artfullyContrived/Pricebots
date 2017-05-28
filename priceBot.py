@@ -225,7 +225,7 @@ def updateTweet ():
 
     time.sleep(HOUR / 2)
     #clears chrome window to avoid openning too many tabs and crashing system
-    Popen('taskkill /F /IM ' + browser, shell=True)
+    Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
 
 #calls update again to run until program is exited out
 updateTweet ()
