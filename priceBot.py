@@ -225,7 +225,12 @@ def updateTweet ():
 
     time.sleep(HOUR / 2)
     #clears chrome window to avoid openning too many tabs and crashing system
-    Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
+    if browser == 'chrome.exe':
+        Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
+    elif browser == 'chromium-browser':
+        Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
+    else:
+        print 'Cannot find browser to kill.'
 
 #calls update again to run until program is exited out
 updateTweet ()
