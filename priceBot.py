@@ -180,9 +180,6 @@ def updateTweet ():
     threading.Timer(HOUR, updateTweet).start()
     print 'updating tweet.'
 
-    #clears chrome window to avoid openning too many tabs and crashing system
-    Popen('taskkill /F /IM ' + browser, shell=True)
-
     #grabs contents from cryptowatch
     r=requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")
     data = r.json()
@@ -226,6 +223,9 @@ def updateTweet ():
     print "Just tweeted:\n" +str(tweet)
     print
 
+    time.sleep(HOUR / 2)
+    #clears chrome window to avoid openning too many tabs and crashing system
+    Popen('taskkill /F /IM ' + browser, shell=True)
 
 #calls update again to run until program is exited out
 updateTweet ()
