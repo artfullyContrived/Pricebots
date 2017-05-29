@@ -6,18 +6,17 @@ import json
 import plotly.offline as offline
 import plotly.graph_objs as go
 import os
-import subprocess
 from subprocess import Popen
 
 #enter the corresponding information from your Twitter application:
 #keep the quotes, replace this with your consumer key
-CONSUMER_KEY = 'WMKa5ds20Y5BmUcQz8o3oLslD'
+CONSUMER_KEY = 'secret...'
 #keep the quotes, replace this with your consumer secret key
-CONSUMER_SECRET = 'Z0UIFrva46quzUwM3OtRY3vJ80L2VVLtReuRB9WwPFvv4PWtcG'
+CONSUMER_SECRET = 'secret...'
 #keep the quotes, replace this with your access token
-ACCESS_KEY = '1523923351-08dEkDOkfjxZ31M8RBQy40eqdV9JicMD6NEQ7VJ'
+ACCESS_KEY = 'secret...'
 #keep the quotes, replace this with your access token secret
-ACCESS_SECRET = 'Cddg3NwALTFHAvqrF3UIYDX9VyWqCBKHkX0cS1WGE9o2h'
+ACCESS_SECRET = 'secret...'
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -169,7 +168,7 @@ def plotTweet():
 #forces tweet to initiate on the hour
 now = time.time()
 round(now)
-while now % MINUTE > EPSILON:
+while now % HOUR > EPSILON:
     print 'Waiting to tweet.'
     now = time.time()
     round(now)
@@ -224,14 +223,14 @@ def updateTweet ():
     print "Just tweeted:\n" +str(tweet)
     print
 
-    #time.sleep(HOUR / 2)
+    time.sleep(HOUR / 2)
     #clears chrome window to avoid openning too many tabs and crashing system
-    try:
-        subprocess.check_call(['taskkill ', '/F',  '/IM', browser])
-    except subprocess.CalledProcessError:
-        pass # handle errors in the called executable
-    except OSError:
-        pass # executable not found
+    if browser == 'chrome.exe':
+        Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
+    elif browser == 'chromium-browser':
+        Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
+    else:
+        print 'Cannot find browser to kill.'
 
 #calls update again to run until program is exited out
 updateTweet ()
