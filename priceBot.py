@@ -1,8 +1,7 @@
 #twitterbot
 #jordan.dwo@gmail.com
 import requests
-import time, datetime, threading, tweepy, sys
-import json
+import time, datetime, threading, tweepy
 import plotly.offline as offline
 import plotly.graph_objs as go
 import os
