@@ -35,10 +35,14 @@ if name == 'nt':
     print 'Operating System is Windows.'
     download_folder = os.path.expanduser('~')+'\Downloads\\'
     print 'Downloads folder is '+ download_folder
+    browser = 'chrome.exe'
+    print browser
 else:
     print 'Operating System is Linux'
     download_folder = os.path.expanduser('~')+'/Downloads/'
     print 'Downloads folder is '+download_folder
+    browser = 'chromium-browser'
+    print browser
 
 def plotTweet():
     # for getting interval of OHLC data from cyrptowatch
@@ -176,9 +180,6 @@ def updateTweet ():
     threading.Timer(HOUR, updateTweet).start()
     print 'updating tweet.'
 
-    #clears chrome window to avoid openning too many tabs and crashing system
-    Popen('taskkill /F /IM chrome.exe', shell=True)
-
     #grabs contents from cryptowatch
     r=requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")
     data = r.json()
@@ -227,6 +228,14 @@ def updateTweet ():
     print "Just tweeted:\n" +str(tweet)
     print
 
+    time.sleep(HOUR / 2)
+    #clears chrome window to avoid openning too many tabs and crashing system
+    if browser == 'chrome.exe':
+        Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
+    elif browser == 'chromium-browser':
+        Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
+    else:
+        print 'Cannot find browser to kill.'
 
 #calls update again to run until program is exited out
 updateTweet ()
