@@ -14,7 +14,7 @@ See Workflow management with Waffle.io
 
 [![Throughput Graph](https://graphs.waffle.io/JordanDworaczyk/EthPriceBot/throughput.svg)](https://waffle.io/JordanDworaczyk/EthPriceBot/)
 
-You can join and take part in discussions [here!](https://waffle.io/JordanDworaczyk/EthPriceBot/join)<script async defer src="http://ethpricebot.enterslack.com/slackin.js"></script>
+You can join and take part in discussions [here!](https://waffle.io/JordanDworaczyk/EthPriceBot/join)<script  src="http://ethpricebot.enterslack.com/slackin.js"></script>
 
 
 
