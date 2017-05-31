@@ -15,8 +15,8 @@ See Workflow management with Waffle.io
 [![Throughput Graph](https://graphs.waffle.io/JordanDworaczyk/EthPriceBot/throughput.svg)](https://waffle.io/JordanDworaczyk/EthPriceBot/)
 
 You can join and take part in discussions at our slack. 
-<a class="ui tiny button" href="http://ethpricebot.enterslack.com">
-	Join ethpricebot's slack
+<a href="http://ethpricebot.enterslack.com">
+	<img src='https://cdn.worldvectorlogo.com/logos/slack.svg' width='90'>
 </a>
 
 
