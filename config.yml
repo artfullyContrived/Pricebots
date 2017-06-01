@@ -1,0 +1,8 @@
+twitter:
+    consumer_key: localhost
+    consumer_access: root
+    access_key: my secret password
+    access_secret: write-math
+bots:
+    coin_name: eth
+    full_name: Ethereum 

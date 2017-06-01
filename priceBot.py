@@ -11,6 +11,7 @@ import time, datetime, threading, tweepy
 import plotly.offline as offline
 import plotly.graph_objs as go
 import os
+import yaml as yaml
 from subprocess import Popen
 
 class PriceBot(object):
@@ -249,12 +250,15 @@ class PriceBot(object):
             print 'Cannot find browser to kill.'
 
 if __name__ == "__main__":
-    consumer_key = ''
-    consumer_secret = ''
-    access_key = ''
-    access_secret = ''
-    coin_name = ''
-    full_name = ''
+    with open("config.yml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+    consumer_key = cfg['twitter']['consumer_key']
+    consumer_secret = cfg['twitter']['consumer_secret']
+    access_key = cfg['twitter']['access_key']
+    access_secret = cfg['twitter']['access_secret']
+    coin_name = cfg['bots']['coin_name']
+    full_name = cfg['bots']['full_name']
 
     bot = PriceBot(consumer_key, consumer_secret, access_key, access_secret
                     coin_name, full_name)
