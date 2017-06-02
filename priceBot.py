@@ -14,12 +14,6 @@ import os
 import yaml as yaml
 from subprocess import Popen
 
-WEEK = 604800
-DAY = 86400
-HOUR = 3600
-MINUTE = 60
-EPSILON = MINUTE * 2
-
 class PriceBot(object):
     """The following code is designed to run mutliple instances of twitter bots.
     The purpose of these twitter bots is to tweet the price data of different
@@ -27,19 +21,25 @@ class PriceBot(object):
     candle stick OHCL chart of the past week.
 
     Attributes:
-        consumer_key: Twitter API Key.
-        consumer_secret: Twitter API Key.
-        access_key: Twitter API Key.
-        access_secret: Twitter API Key.
+        CONSUMER_KEY: Twitter API Key.
+        CONSUMER_SECRET: Twitter API Key.
+        ACCESS_KEY: Twitter API Key.
+        ACCESS_SECRET: Twitter API Key.
         coin_name: Name of coin that bot is tweeting about. Such as, BTC, ETH,
                    LTC, ETC, etc..
         download_folder: Folder to place picture of chart.
     """
 
+    WEEK = 604800
+    DAY = 86400
+    HOUR = 3600
+    MINUTE = 60
+    EPSILON = MINUTE * 2
+
     def __init__(self,
                     consumer_key, consumer_secret,
                     access_key, access_secret,
-                    coin_name, full_name, download_folder ):
+                    coin_name, full_name, download_folder):
         """Return a PriceBot object with the coin_name of *coin_name* with the
             given API keys."""
         self.consumer_key = consumer_key
@@ -47,11 +47,28 @@ class PriceBot(object):
         self.access_key = access_key
         self.access_secret = access_secret
         self.coin_name = coin_name
+        self.download_folder = _findDownLoadsFolder()
         self.full_name = full_name
-        self.download_folder = download_folder
 
-    def plotTweet(self):
-        """Plots the tweet, opens plot in window, and downloads image of plot into downloads folder."""
+    def _findDownLoadsFolder():
+        name_of_operating_system = os.name
+
+        #creates download_folder's path based off of os
+        if name_of_operating_system == 'nt':
+            print 'The operating System is Windows.'
+            download_folder = os.path.expanduser('~')+'\Downloads\\'
+            print 'The downloads folder is '+ download_folder
+            browser = 'The browser is chrome.exe'
+            print browser
+        else:
+            print 'The operating System is Linux'
+            download_folder = os.path.expanduser('~')+'/Downloads/'
+            print 'The downloads folder is '+download_folder
+            browser = 'The browser is chromium-browser'
+            print browser
+        return download_folder
+
+    def plotTweet():
         # for getting interval of OHLC data from cyrptowatch
         now =  int(time.time())
         date = int(time.time() - WEEK)
@@ -169,13 +186,11 @@ class PriceBot(object):
         #plots figure, saves as html, saves pic of tweet into downloads folder
         offline.plot(fig, image='png',image_filename=coin_name + 'plot',auto_open=True)
 
-    def updateTweet (self):
-        """Uploads tweet to twitter."""
+    def updateTweet ():
+        #after tweet has been initiated it will start every hour again
+        print 'Sleeping...'
+        threading.Timer(HOUR, updateTweet).start()
         print 'updating tweet.'
-
-        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        auth.set_access_token(access_key, access_secret)
-        api = tweepy.API(auth)
 
         #grabs contents from cryptowatch
         r=requests.get("https://api.cryptowat.ch/markets/coinbase/" + coin_name + "usd/summary")
@@ -206,69 +221,24 @@ class PriceBot(object):
 
         now = datetime.datetime.now()
 
+        #calls plot function
+        plotTweet()
+
         #sleeps to allow time for plot.png to be downloaded into folder
-        while os.path.exists( download_folder + coin_name + 'plot.png' ) == False:
+        while os.path.exists( download_folder + 'plot.png' ) == False:
             print 'Picture of chart is not yet downloaded'
             time.sleep(5)
         print 'Picture of chart has been downloaded'
 
         #tweets to twitter with picture and tweet status
-        api.update_with_media(download_folder + coin_name +'plot.png', status=tweet)
+        api.update_with_media(download_folder+'plot.png', status=tweet)
         # removes picture from file after tweeted
-        os.remove(download_folder+ coin_name + 'plot.png')
+        os.remove(download_folder+'plot.png')
 
         #prints data to console
         print "Last tweet sent:" + now.strftime('%Y/%m/%d/ %I:%M:%p')
         print "Just tweeted:\n" +str(tweet)
         print
-
-def _findDownLoadsFolder():
-    name_of_operating_system = os.name
-
-    #creates download_folder's path based off of os
-    if name_of_operating_system == 'nt':
-        print 'The operating System is Windows.'
-        download_folder = os.path.expanduser('~')+'\Downloads\\'
-        print 'The downloads folder is '+ download_folder
-        browser = 'The browser is chrome.exe'
-        print browser
-    else:
-        print 'The operating System is Linux'
-        download_folder = os.path.expanduser('~')+'/Downloads/'
-        print 'The downloads folder is '+download_folder
-        browser = 'The browser is chromium-browser'
-        print browser
-    return download_folder
-
-if __name__ == "__main__":
-    with open("config.yml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
-
-    for bot in cfg:
-        consumer_key = cfg[bot]['consumer_key']
-        consumer_secret = cfg[bot]['consumer_secret']
-        access_key = cfg[bot]['access_key']
-        access_secret = cfg[bot]['access_secret']
-        coin_name = cfg[bot]['coin_name']
-        full_name = cfg[bot]['full_name']
-        download_folder = _findDownLoadsFolder()
-
-    bot = PriceBot(consumer_key, consumer_secret, access_key, access_secret,
-                    coin_name, full_name, download_folder)
-
-    now = time.time()
-    round(now)
-
-    while True:
-        #forces tweet to initiate on the hour
-        while now % HOUR > EPSILON:
-            print 'Waiting to tweet.'
-            now = time.time()
-            round(now)
-            time.sleep(MINUTE / 2)
-
-        bot.plotTweet()
-        bot.updateTweet()
 
         time.sleep(HOUR / 2)
         #clears chrome window to avoid openning too many tabs and crashing system
@@ -278,3 +248,29 @@ if __name__ == "__main__":
             Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
         else:
             print 'Cannot find browser to kill.'
+
+if __name__ == "__main__":
+    with open("config.yml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+    consumer_key = cfg['twitter']['consumer_key']
+    consumer_secret = cfg['twitter']['consumer_secret']
+    access_key = cfg['twitter']['access_key']
+    access_secret = cfg['twitter']['access_secret']
+    coin_name = cfg['bots']['coin_name']
+    full_name = cfg['bots']['full_name']
+
+    bot = PriceBot(consumer_key, consumer_secret, access_key, access_secret
+                    coin_name, full_name)
+
+    now = time.time()
+    round(now)
+
+    #forces tweet to initiate on the hour
+    while now % HOUR > EPSILON:
+        print 'Waiting to tweet.'
+        now = time.time()
+        round(now)
+        time.sleep(MINUTE / 2)
+
+    bot.updateTweet()

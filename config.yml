@@ -1,7 +1,8 @@
-1:
-  consumer_key: WMKa5ds20Y5BmUcQz8o3oLslD
-  consumer_secret: Z0UIFrva46quzUwM3OtRY3vJ80L2VVLtReuRB9WwPFvv4PWtcG
-  access_key: 1523923351-08dEkDOkfjxZ31M8RBQy40eqdV9JicMD6NEQ7VJ
-  access_secret: Cddg3NwALTFHAvqrF3UIYDX9VyWqCBKHkX0cS1WGE9o2h
-  coin_name: eth
-  full_name: Ethereum
+twitter:
+    consumer_key: localhost
+    consumer_secret: root
+    access_key: my secret password
+    access_secret: write-math
+bots:
+    coin_name: eth
+    full_name: Ethereum
