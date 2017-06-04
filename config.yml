@@ -5,3 +5,5 @@
   access_secret: secret
   coin_name: eth
   full_name: Ethereum
+  increasing_color: #19cf86
+  decreasing_color: #cf1962

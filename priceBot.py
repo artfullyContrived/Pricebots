@@ -27,10 +27,10 @@ class PriceBot(object):
     candle stick OHCL chart of the past week.
 
     Attributes:
-        consumer_key: Twitter API Key.
-        consumer_secret: Twitter API Key.
-        access_key: Twitter API Key.
-        access_secret: Twitter API Key.
+        CONSUMER_KEY: Twitter API Key.
+        CONSUMER_SECRET: Twitter API Key.
+        ACCESS_KEY: Twitter API Key.
+        ACCESS_SECRET: Twitter API Key.
         coin_name: Name of coin that bot is tweeting about. Such as, BTC, ETH,
                    LTC, ETC, etc..
         download_folder: Folder to place picture of chart.
@@ -39,7 +39,7 @@ class PriceBot(object):
     def __init__(self,
                     consumer_key, consumer_secret,
                     access_key, access_secret,
-                    coin_name, full_name, download_folder ):
+                    coin_name, full_name, download_folder):
         """Return a PriceBot object with the coin_name of *coin_name* with the
             given API keys."""
         self.consumer_key = consumer_key
@@ -47,11 +47,10 @@ class PriceBot(object):
         self.access_key = access_key
         self.access_secret = access_secret
         self.coin_name = coin_name
-        self.full_name = full_name
         self.download_folder = download_folder
+        self.full_name = full_name
 
-    def plotTweet(self):
-        """Plots the tweet, opens plot in window, and downloads image of plot into downloads folder."""
+    def plotTweet(self, decreasing_color, increasing_color):
         # for getting interval of OHLC data from cyrptowatch
         now =  int(time.time())
         date = int(time.time() - WEEK)
@@ -102,10 +101,10 @@ class PriceBot(object):
                                low=low_data,
                                close=close_data,
                                increasing=dict(name='<i>Bullish Hour</i>',
-                                    line=dict(color= '#19cf86')
+                                    line=dict(color= increasing_color)
                                     ),
                                decreasing=dict(name='<i>Bearish Hour</i>',
-                                   line=dict(color= '#cf1962')
+                                   line=dict(color= decreasing_color)
                                    )
                                )
         data = [trace]
@@ -170,12 +169,6 @@ class PriceBot(object):
         offline.plot(fig, image='png',image_filename=coin_name + 'plot',auto_open=True)
 
     def updateTweet (self):
-        """Uploads tweet to twitter."""
-        print 'updating tweet.'
-
-        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        auth.set_access_token(access_key, access_secret)
-        api = tweepy.API(auth)
 
         #grabs contents from cryptowatch
         r=requests.get("https://api.cryptowat.ch/markets/coinbase/" + coin_name + "usd/summary")
@@ -207,15 +200,15 @@ class PriceBot(object):
         now = datetime.datetime.now()
 
         #sleeps to allow time for plot.png to be downloaded into folder
-        while os.path.exists( download_folder + coin_name + 'plot.png' ) == False:
+        while os.path.exists( download_folder +coin_name+ 'plot.png' ) == False:
             print 'Picture of chart is not yet downloaded'
             time.sleep(5)
         print 'Picture of chart has been downloaded'
 
         #tweets to twitter with picture and tweet status
-        api.update_with_media(download_folder + coin_name +'plot.png', status=tweet)
+        api.update_with_media(download_folder+ coin_name+ 'plot.png', status=tweet)
         # removes picture from file after tweeted
-        os.remove(download_folder+ coin_name + 'plot.png')
+        os.remove(download_folder+coin_name+'plot.png')
 
         #prints data to console
         print "Last tweet sent:" + now.strftime('%Y/%m/%d/ %I:%M:%p')
@@ -241,6 +234,8 @@ def _findDownLoadsFolder():
     return download_folder
 
 if __name__ == "__main__":
+
+
     with open("config.yml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
@@ -252,6 +247,12 @@ if __name__ == "__main__":
         coin_name = cfg[bot]['coin_name']
         full_name = cfg[bot]['full_name']
         download_folder = _findDownLoadsFolder()
+        increasing_color = cfg[bot]['increasing_color']
+        decreasing_color = cfg[bot]['decreasing_color']
+
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_key, access_secret)
+    api = tweepy.API(auth)
 
     bot = PriceBot(consumer_key, consumer_secret, access_key, access_secret,
                     coin_name, full_name, download_folder)
@@ -261,13 +262,13 @@ if __name__ == "__main__":
 
     while True:
         #forces tweet to initiate on the hour
-        while now % HOUR > EPSILON:
+        while now % MINUTE > EPSILON:
             print 'Waiting to tweet.'
             now = time.time()
             round(now)
             time.sleep(MINUTE / 2)
 
-        bot.plotTweet()
+        bot.plotTweet(increasing_color, decreasing_color)
         bot.updateTweet()
 
         time.sleep(HOUR / 2)
