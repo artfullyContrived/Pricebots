@@ -1,5 +1,5 @@
 # Pricebots 
-@ETHPriceBot and @BTCPriceBot are pricebots that tweet the price of cryptocurriences every hour. 
+[@ETHPriceBot](https://twitter.com/ETHPriceBot) and [@BTCPriceBot](https://twitter.com/BTCPriceBot) are pricebots that tweet the price of cryptocurriences every hour. 
 
 # How it works
 Our pull price information from
