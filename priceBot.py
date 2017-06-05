@@ -13,6 +13,7 @@ import plotly.graph_objs as go
 import os
 import yaml as yaml
 from subprocess import Popen
+import sys
 
 WEEK = 604800
 DAY = 86400
@@ -144,8 +145,8 @@ class PriceBot(object):
                 ),
                 side='right'
             ),
-            paper_bgcolor= '#f5e6d1',
-            plot_bgcolor= '#f5e6d1',
+            paper_bgcolor= '#ffffff',
+            plot_bgcolor= '#ffffff',
             legend = dict(
                 x = -.1,
                 y = -.25,
@@ -237,8 +238,17 @@ def _findDownLoadsFolder():
     return download_folder
 
 if __name__ == "__main__":
+    arg = sys.argv[1]
 
-    with open("config.yml", 'r') as ymlfile:
+    if arg == 'test':
+        desktop_path = os.path.expanduser('~')+'\Desktop\\'
+        config_file = desktop_path + 'test.yml'
+        time_to_tweet = MINUTE
+    elif arg == 'run':
+        config_file = 'config.yml'
+        time_to_tweet = HOUR
+
+    with open(config_file, 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
     while True:
@@ -247,7 +257,7 @@ if __name__ == "__main__":
         round(now)
 
         #forces tweet to initiate on the hour
-        while now % MINUTE > EPSILON:
+        while now % time_to_tweet > EPSILON:
             print 'Waiting to tweet.'
             now = time.time()
             round(now)
