@@ -197,8 +197,8 @@ class PriceBot(object):
         volume = "Volume: $%9.2f\n" % volume
 
         #creates string for tweet
-        tweet = "#"+ coin_name +" 24hr Summary:\n" + last + high + low + percentage \
-            + absolute_change + volume + "$"+coin_name+" #"+full_name+" #coinbase"
+        tweet = "#"+ coin_name.upper() +" 24hr Summary:\n" + last + high + low + percentage \
+            + absolute_change + volume + "$"+coin_name.upper()+" #"+full_name+" #coinbase"
 
         now = datetime.datetime.now()
 
