@@ -251,7 +251,7 @@ if __name__ == "__main__":
 
     if time == 'hourly':
          time_to_tweet = HOUR
-    elif: time == 'now':
+    elif time == 'now':
         time_to_tweet = MINUTE
 
     with open(config_file, 'r') as ymlfile:
