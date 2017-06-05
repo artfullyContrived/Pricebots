@@ -239,7 +239,7 @@ def _findDownLoadsFolder():
 
 if __name__ == "__main__":
     arg = sys.argv[1]
-    time = sys.argv[2]
+    when = sys.argv[2]
 
     if arg == 'test':
         desktop_path = os.path.expanduser('~')+'\Desktop\\'
@@ -249,9 +249,9 @@ if __name__ == "__main__":
         config_file = 'config.yml'
         time_to_tweet = HOUR
 
-    if time == 'hourly':
+    if when == 'hourly':
          time_to_tweet = HOUR
-    elif time == 'now':
+    elif when == 'now':
         time_to_tweet = MINUTE
 
     with open(config_file, 'r') as ymlfile:
