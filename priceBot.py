@@ -39,7 +39,8 @@ class PriceBot(object):
     def __init__(self,
                     consumer_key, consumer_secret,
                     access_key, access_secret,
-                    coin_name, full_name, download_folder):
+                    coin_name, full_name, download_folder,
+                    increasing_color, decreasing_color):
         """Return a PriceBot object with the coin_name of *coin_name* with the
             given API keys."""
         self.consumer_key = consumer_key
@@ -49,8 +50,10 @@ class PriceBot(object):
         self.coin_name = coin_name
         self.download_folder = download_folder
         self.full_name = full_name
+        self.increasing_color = increasing_color
+        self.decreasing_color = decreasing_color
 
-    def plotTweet(self, decreasing_color, increasing_color):
+    def plotTweet(self):
         # for getting interval of OHLC data from cyrptowatch
         now =  int(time.time())
         date = int(time.time() - WEEK)
@@ -113,7 +116,7 @@ class PriceBot(object):
         cwd = os.getcwd()
         layout = \
             go.Layout(
-            title = full_name + 'Price',
+            title = full_name + ' Price',
             titlefont=dict(
                 family='Courier New, monospace',
                 size=34,
@@ -235,32 +238,14 @@ def _findDownLoadsFolder():
 
 if __name__ == "__main__":
 
-
     with open("config.yml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-    for bot in cfg:
-        consumer_key = cfg[bot]['consumer_key']
-        consumer_secret = cfg[bot]['consumer_secret']
-        access_key = cfg[bot]['access_key']
-        access_secret = cfg[bot]['access_secret']
-        coin_name = cfg[bot]['coin_name']
-        full_name = cfg[bot]['full_name']
-        download_folder = _findDownLoadsFolder()
-        increasing_color = cfg[bot]['increasing_color']
-        decreasing_color = cfg[bot]['decreasing_color']
-
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_key, access_secret)
-    api = tweepy.API(auth)
-
-    bot = PriceBot(consumer_key, consumer_secret, access_key, access_secret,
-                    coin_name, full_name, download_folder)
-
-    now = time.time()
-    round(now)
-
     while True:
+
+        now = time.time()
+        round(now)
+
         #forces tweet to initiate on the hour
         while now % MINUTE > EPSILON:
             print 'Waiting to tweet.'
@@ -268,8 +253,29 @@ if __name__ == "__main__":
             round(now)
             time.sleep(MINUTE / 2)
 
-        bot.plotTweet(increasing_color, decreasing_color)
-        bot.updateTweet()
+        for bot in cfg:
+            consumer_key = cfg[bot]['consumer_key']
+            consumer_secret = cfg[bot]['consumer_secret']
+            access_key = cfg[bot]['access_key']
+            access_secret = cfg[bot]['access_secret']
+            coin_name = cfg[bot]['coin_name']
+            full_name = cfg[bot]['full_name']
+            download_folder = _findDownLoadsFolder()
+            increasing_color = cfg[bot]['increasing_color']
+            decreasing_color = cfg[bot]['decreasing_color']
+
+            print cfg
+
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(access_key, access_secret)
+            api = tweepy.API(auth)
+
+            bot = PriceBot(consumer_key, consumer_secret, access_key,
+                access_secret, coin_name, full_name, download_folder,
+                increasing_color, decreasing_color)
+
+            bot.plotTweet()
+            bot.updateTweet()
 
         time.sleep(HOUR / 2)
         #clears chrome window to avoid openning too many tabs and crashing system
