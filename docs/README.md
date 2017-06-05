@@ -2,7 +2,7 @@
 [@ETHPriceBot](https://twitter.com/ETHPriceBot) and [@BTCPriceBot](https://twitter.com/BTCPriceBot) are pricebots that tweet the price of cryptocurriences every hour. 
 
 # How it works
-Our pull price information from
+Our bots pull price information from
 [coinbase](https://www.coinbase.com) via
 [cryptowat.ch](https://cryptowat.ch/coinbase/ethusd/1d). They then use
 [plotly](https://plot.ly/python/) to plot the price data and save it as a
