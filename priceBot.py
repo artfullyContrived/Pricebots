@@ -54,6 +54,7 @@ class PriceBot(object):
         self.increasing_color = increasing_color
         self.decreasing_color = decreasing_color
 
+    @classmethod
     def plotTweet(self):
         # for getting interval of OHLC data from cyrptowatch
         now =  int(time.time())
@@ -172,6 +173,7 @@ class PriceBot(object):
         #plots figure, saves as html, saves pic of tweet into downloads folder
         offline.plot(fig, image='png',image_filename=coin_name + 'plot',auto_open=True)
 
+    @classmethod 
     def updateTweet (self):
 
         #grabs contents from cryptowatch
