@@ -173,8 +173,8 @@ class PriceBot(object):
         #plots figure, saves as html, saves pic of tweet into downloads folder
         offline.plot(fig, image='png',image_filename=coin_name + 'plot',auto_open=True)
 
-    @classmethod 
-    def updateTweet (self):
+    @classmethod
+    def updateTweet(self):
 
         #grabs contents from cryptowatch
         r=requests.get("https://api.cryptowat.ch/markets/coinbase/" + coin_name + "usd/summary")
@@ -257,7 +257,7 @@ if __name__ == "__main__":
         time_to_tweet = MINUTE
 
     with open(config_file, 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
+        cfg = yaml.safe_load(ymlfile)
 
     while True:
 
