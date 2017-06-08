@@ -213,6 +213,7 @@ class PriceBot(object):
 
         #tweets to twitter with picture and tweet status
         api.update_with_media(download_folder+ coin_name+ 'plot.png', status=tweet)
+        
         # removes picture from file after tweeted
         os.remove(download_folder+coin_name+'plot.png')
 
@@ -239,9 +240,25 @@ def _findDownLoadsFolder():
         print browser
     return download_folder
 
+def _findBrowser():
+    name_of_operating_system = os.name
+
+    #creates download_folder's path based off of os
+    if name_of_operating_system == 'nt':
+        print 'The operating System is Windows.'
+        browser = 'chrome.exe'
+        print 'The browser is ' + browser
+    else:
+        print 'The operating System is Linux'
+        browser = 'chromium-browser'
+        print 'The browser is ' + browser
+    return browser
+
 if __name__ == "__main__":
     arg = sys.argv[1]
     when = sys.argv[2]
+
+    browser = _findBrowser()
 
     if arg == 'test':
         desktop_path = os.path.expanduser('~')+'\Desktop\\'
@@ -295,7 +312,7 @@ if __name__ == "__main__":
             bot.plotTweet()
             bot.updateTweet()
 
-        time.sleep(HOUR / 2)
+        time.sleep( time_to_tweet / 2 )
         #clears chrome window to avoid openning too many tabs and crashing system
         if browser == 'chrome.exe':
             Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
@@ -303,3 +320,4 @@ if __name__ == "__main__":
             Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
         else:
             print 'Cannot find browser to kill.'
+            print browser
