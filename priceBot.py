@@ -212,8 +212,9 @@ class PriceBot(object):
         print 'Picture of chart has been downloaded'
 
         #tweets to twitter with picture and tweet status
-        api.update_with_media(download_folder+ coin_name+ 'plot.png', status=tweet)
-        
+        api.update_with_media(download_folder+ coin_name+ 'plot.png',
+        status=tweet)
+
         # removes picture from file after tweeted
         os.remove(download_folder+coin_name+'plot.png')
 
