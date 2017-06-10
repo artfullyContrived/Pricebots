@@ -7,4 +7,4 @@
 
 Tweets the price of Bitcoint and Ethereum. 
 
-See more about it works [here](https://jordandworaczyk.github.io/EthPriceBot/). 
+See more about it works [here](https://jordandworaczyk.github.io/Pricebots/). 
