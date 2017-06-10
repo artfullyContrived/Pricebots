@@ -318,7 +318,7 @@ if __name__ == "__main__":
         if browser == 'chrome.exe':
             Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
         elif browser == 'chromium-browser':
-            os.system('killall ' + browser)
+            os.system('killall ' + browser, shell=False)
         else:
             print 'Cannot find browser to kill.'
             print browser
