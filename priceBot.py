@@ -1,25 +1,19 @@
-#twitterbot
-#jordan.dwo@gmail.com
+# Jordan Dworaczyk
+# jordan.dwo@gmail.com
+# -----------------------
+# The following code is designed to run mutliple instances of twitter bots.
+# The purpose of these twitter bots is to tweet the price data of different
+# cyrpto markets. The price data includes a 24hr market summary as well as a
+# candle stick OHCL chart of the past week.
+
 import requests
 import time, datetime, threading, tweepy
 import plotly.offline as offline
 import plotly.graph_objs as go
 import os
+import yaml as yaml
 from subprocess import Popen
-
-#enter the corresponding information from your Twitter application:
-#keep the quotes, replace this with your consumer key
-CONSUMER_KEY = 'secret...'
-#keep the quotes, replace this with your consumer secret key
-CONSUMER_SECRET = 'secret...'
-#keep the quotes, replace this with your access token
-ACCESS_KEY = 'secret...'
-#keep the quotes, replace this with your access token secret
-ACCESS_SECRET = 'secret...'
-
-auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-api = tweepy.API(auth)
+import sys
 
 WEEK = 604800
 DAY = 86400
@@ -27,214 +21,304 @@ HOUR = 3600
 MINUTE = 60
 EPSILON = MINUTE * 2
 
-#finds users operating system
-name = os.name
-#creates download_folder's path based of os
-if name == 'nt':
-    print 'Operating System is Windows.'
-    download_folder = os.path.expanduser('~')+'\Downloads\\'
-    print 'Downloads folder is '+ download_folder
-    browser = 'chrome.exe'
-    print browser
-else:
-    print 'Operating System is Linux'
-    download_folder = os.path.expanduser('~')+'/Downloads/'
-    print 'Downloads folder is '+download_folder
-    browser = 'chromium-browser'
-    print browser
+class PriceBot(object):
+    """The following code is designed to run mutliple instances of twitter bots.
+    The purpose of these twitter bots is to tweet the price data of different
+    cyrpto markets. The price data includes a 24hr market summary as well as a
+    candle stick OHCL chart of the past week.
 
-def plotTweet():
-    # for getting interval of OHLC data from cyrptowatch
-    now =  int(time.time())
-    date = int(time.time() - WEEK)
+    Attributes:
+        CONSUMER_KEY: Twitter API Key.
+        CONSUMER_SECRET: Twitter API Key.
+        ACCESS_KEY: Twitter API Key.
+        ACCESS_SECRET: Twitter API Key.
+        coin_name: Name of coin that bot is tweeting about. Such as, BTC, ETH,
+                   LTC, ETC, etc..
+        download_folder: Folder to place picture of chart.
+    """
 
-    # prints out to console
-    print "Last week:  %9.0f" % date
-    print datetime.datetime.fromtimestamp(date).strftime('%Y-%m-%d %H:%M:%S')
-    print "\nNow: %9.0f" % now
-    print datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d %H:%M:%S')
-    print
+    def __init__(self,
+                    consumer_key, consumer_secret,
+                    access_key, access_secret,
+                    coin_name, full_name, download_folder,
+                    increasing_color, decreasing_color):
+        """Return a PriceBot object with the coin_name of *coin_name* with the
+            given API keys."""
+        self.consumer_key = consumer_key
+        self.consumer_secret = consumer_secret
+        self.access_key = access_key
+        self.access_secret = access_secret
+        self.coin_name = coin_name
+        self.download_folder = download_folder
+        self.full_name = full_name
+        self.increasing_color = increasing_color
+        self.decreasing_color = decreasing_color
 
-    # parameters for grabbing specific content form cyrptowatch
-    params = {'after': date, 'before': now, 'periods': HOUR}
+    @classmethod
+    def plotTweet(self):
+        # for getting interval of OHLC data from cyrptowatch
+        now =  int(time.time())
+        date = int(time.time() - WEEK)
 
-    # grabs OHCL contents from cryptowatch
-    r = requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/ohlc",
-                    params=params)
-    data = r.json()
+        # prints out to console
+        print "Last week:  %9.0f" % date
+        print datetime.datetime.fromtimestamp(date).strftime('%Y-%m-%d %H:%M:%S')
+        print "\nNow: %9.0f" % now
+        print datetime.datetime.fromtimestamp(now).strftime('%Y-%m-%d %H:%M:%S')
+        print
 
-    # puts json data into list with each element being a candle
-    data = data['result'][str(HOUR)]
+        # parameters for grabbing specific content form cyrptowatch
+        params = {'after': date, 'before': now, 'periods': HOUR}
 
-    # initializing lists for OHCL data
-    dates = list()
-    open_data = list()
-    high_data = list()
-    low_data = list()
-    close_data = list()
-    volume_data = list()
+        # grabs OHCL contents from cryptowatch
+        r = requests.get("https://api.cryptowat.ch/markets/coinbase/" + coin_name + "usd/ohlc",
+                        params=params)
+        data = r.json()
 
-    # reading data form each candle into OHCL lists
-    for candle in data:
-        #puts day for each candle into datetime for plotting
-        day = candle[0]
-        day = datetime.datetime.fromtimestamp(day).strftime('%Y-%m-%d %H:%M:%S')
-        dates.append(day)
+        # puts json data into list with each element being a candle
+        data = data['result'][str(HOUR)]
 
-        open_data.append(candle[1])
-        high_data.append(candle[2])
-        low_data.append(candle[3])
-        close_data.append(candle[4])
-        volume_data.append(candle[5])
+        # initializing lists for OHCL data
+        dates = list()
+        open_data = list()
+        high_data = list()
+        low_data = list()
+        close_data = list()
+        volume_data = list()
 
+        # reading data form each candle into OHCL lists
+        for candle in data:
+            #puts day for each candle into datetime for plotting
+            day = candle[0]
+            day = datetime.datetime.fromtimestamp(day).strftime('%Y-%m-%d %H:%M:%S')
+            dates.append(day)
 
-    # traces the data for plot
-    trace = go.Candlestick(x=dates,
-                           open=open_data,
-                           high=high_data,
-                           low=low_data,
-                           close=close_data,
-                           increasing=dict(name='<i>Bullish Hour</i>',
-                                line=dict(color= '#19cf86')
-                                ),
-                           decreasing=dict(name='<i>Bearish Hour</i>',
-                               line=dict(color= '#cf1962')
+            open_data.append(candle[1])
+            high_data.append(candle[2])
+            low_data.append(candle[3])
+            close_data.append(candle[4])
+            volume_data.append(candle[5])
+
+        # traces the data for plot
+        trace = go.Candlestick(x=dates,
+                               open=open_data,
+                               high=high_data,
+                               low=low_data,
+                               close=close_data,
+                               increasing=dict(name='<i>Bullish Hour</i>',
+                                    line=dict(color= increasing_color)
+                                    ),
+                               decreasing=dict(name='<i>Bearish Hour</i>',
+                                   line=dict(color= decreasing_color)
+                                   )
                                )
-                           )
-    data = [trace]
+        data = [trace]
 
-    # attributes for plot
-    cwd = os.getcwd()
-    layout = \
-        go.Layout(
-        title='Ethereum Price',
-        titlefont=dict(
-            family='Courier New, monospace',
-            size=34,
-            color='#7f7f7f'
-            )
-        ,
-        xaxis=dict(
-            rangeslider=dict(
-                visible=False
-            ),
-            title='Past Seven Days (UTC Time)<br>',
-            showgrid= True,
+        # attributes for plot
+        cwd = os.getcwd()
+        layout = \
+            go.Layout(
+            title = full_name + ' Price',
             titlefont=dict(
                 family='Courier New, monospace',
-                size=24,
+                size=34,
                 color='#7f7f7f'
-            )
-        ),
-        yaxis=dict(
-            title='USD',
-            titlefont=dict(
-                family='Courier New, monospace',
-                size=24,
-                color='#7f7f7f'
+                )
+            ,
+            xaxis=dict(
+                rangeslider=dict(
+                    visible=False
+                ),
+                title='Past Seven Days (UTC Time)<br>',
+                showgrid= True,
+                titlefont=dict(
+                    family='Courier New, monospace',
+                    size=24,
+                    color='#7f7f7f'
+                )
             ),
-            side='right'
-        ),
-        paper_bgcolor= '#f5e6d1',
-        plot_bgcolor= '#f5e6d1',
-        legend = dict(
-            x = -.1,
-            y = -.25,
-            font=dict(
-                family='Courier New, monospace',
-                size=12,
-                color='#7f7f7f'
+            yaxis=dict(
+                title='USD',
+                titlefont=dict(
+                    family='Courier New, monospace',
+                    size=24,
+                    color='#7f7f7f'
+                ),
+                side='right'
             ),
-        ),
-        images=[dict(
-            source= 'https://raw.githubusercontent.com/JordanDworaczyk/EthPriceBot/master/watermark.png',
-            xref='paper', yref='paper',
-            x=.95, y=-.4,
-            sizex=0.2, sizey=0.2,
-            opacity=0.1,
-            xanchor='left', yanchor='bottom'
-        )]
-    )
-    print cwd
-    # combines data and layout into figure
-    fig = go.Figure(data=data, layout=layout)
+            paper_bgcolor= '#ffffff',
+            plot_bgcolor= '#ffffff',
+            legend = dict(
+                x = -.1,
+                y = -.25,
+                font=dict(
+                    family='Courier New, monospace',
+                    size=12,
+                    color='#7f7f7f'
+                ),
+            ),
+            images=[dict(
+                source= 'https://raw.githubusercontent.com/JordanDworaczyk/EthPriceBot/master/' + coin_name + 'watermark.png',
+                xref='paper', yref='paper',
+                x=.95, y=-.4,
+                sizex=0.2, sizey=0.2,
+                opacity=0.1,
+                xanchor='left', yanchor='bottom'
+            )]
+        )
+        print cwd
+        # combines data and layout into figure
+        fig = go.Figure(data=data, layout=layout)
 
-    #plots figure, saves as html, saves pic of tweet into downloads folder
-    offline.plot(fig, image='png',image_filename='plot',auto_open=True)
+        #plots figure, saves as html, saves pic of tweet into downloads folder
+        offline.plot(fig, image='png',image_filename=coin_name + 'plot',auto_open=True)
 
+    @classmethod
+    def updateTweet(self):
 
+        #grabs contents from cryptowatch
+        r=requests.get("https://api.cryptowat.ch/markets/coinbase/" + coin_name + "usd/summary")
+        data = r.json()
 
-#forces tweet to initiate on the hour
-now = time.time()
-round(now)
-while now % HOUR > EPSILON:
-    print 'Waiting to tweet.'
-    now = time.time()
-    round(now)
-    time.sleep(MINUTE / 2)
+        #finds data in contents
+        last = data['result']['price']['last']
+        high = data['result']['price']['high']
+        low = data['result']['price']['low']
+        percentage = data['result']['price']['change']['percentage']
+        absolute_change = data['result']['price']['change']['absolute']
+        volume = data['result']['volume']
 
-def updateTweet ():
-    #after tweet has been initiated it will start every hour again
-    print 'Sleeping...'
-    threading.Timer(HOUR, updateTweet).start()
-    print 'updating tweet.'
+        #puts into percentage format
+        percentage = percentage * 100
 
-    #grabs contents from cryptowatch
-    r=requests.get("https://api.cryptowat.ch/markets/coinbase/ethusd/summary")
-    data = r.json()
+        #turns data into string format
+        last = "Last: $%5.2f\n" % last
+        high = "High: $%5.2f\n" % high
+        low = "Low: $%5.2f\n" % low
+        percentage = "Change: %3.2f%%" % percentage
+        absolute_change = " | $%3.2f\n" % absolute_change
+        volume = "Volume: $%9.2f\n" % volume
 
-    #finds data in contents
-    last = data['result']['price']['last']
-    high = data['result']['price']['high']
-    low = data['result']['price']['low']
-    percentage = data['result']['price']['change']['percentage']
-    absolute_change = data['result']['price']['change']['absolute']
-    volume = data['result']['volume']
+        #creates string for tweet
+        tweet = "#"+ coin_name.upper() +" 24hr Summary:\n" + last + high + low + percentage \
+            + absolute_change + volume + "$"+coin_name.upper()+" #"+full_name+" #coinbase"
 
-    #puts into percentage format
-    percentage = percentage * 100
+        now = datetime.datetime.now()
 
-    #turns data into string format
-    last = "Last: $%5.2f\n" % last
-    high = "High: $%5.2f\n" % high
-    low = "Low: $%5.2f\n" % low
-    percentage = "Change: %3.2f%%" % percentage
-    absolute_change = " | $%3.2f\n" % absolute_change
-    volume = "Volume: $%9.2f\n" % volume
+        #sleeps to allow time for plot.png to be downloaded into folder
+        while os.path.exists( download_folder +coin_name+ 'plot.png' ) == False:
+            print 'Picture of chart is not yet downloaded'
+            time.sleep(5)
+        print 'Picture of chart has been downloaded'
 
-    #creates string for tweet
-    tweet = "#Eth 24hr Summary:\n" + last + high + low + percentage \
-        + absolute_change + volume + "$eth #Ethereum #coinbase"
+        #tweets to twitter with picture and tweet status
+        api.update_with_media(download_folder+ coin_name+ 'plot.png',
+        status=tweet)
 
-    now = datetime.datetime.now()
+        # removes picture from file after tweeted
+        os.remove(download_folder+coin_name+'plot.png')
 
-    #calls plot function
-    plotTweet()
+        #prints data to console
+        print "Last tweet sent:" + now.strftime('%Y/%m/%d/ %I:%M:%p')
+        print "Just tweeted:\n" +str(tweet)
+        print
 
-    #sleeps to allow time for plot.png to be downloaded into folder
-    while os.path.exists( download_folder + 'plot.png' ) == False:
-        print 'Picture of chart is not yet downloaded'
-        time.sleep(5)
-    print 'Picture of chart has been downloaded'
+def _findDownLoadsFolder():
+    name_of_operating_system = os.name
 
-    #tweets to twitter with picture and tweet status
-    api.update_with_media(download_folder+'plot.png', status=tweet)
-    # removes picture from file after tweeted
-    os.remove(download_folder+'plot.png')
-
-    #prints data to console
-    print "Last tweet sent:" + now.strftime('%Y/%m/%d/ %I:%M:%p')
-    print "Just tweeted:\n" +str(tweet)
-    print
-
-    time.sleep(HOUR / 2)
-    #clears chrome window to avoid openning too many tabs and crashing system
-    if browser == 'chrome.exe':
-        Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
-    elif browser == 'chromium-browser':
-        Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
+    #creates download_folder's path based off of os
+    if name_of_operating_system == 'nt':
+        print 'The operating System is Windows.'
+        download_folder = os.path.expanduser('~')+'\Downloads\\'
+        print 'The downloads folder is '+ download_folder
+        browser = 'The browser is chrome.exe'
+        print browser
     else:
-        print 'Cannot find browser to kill.'
+        print 'The operating System is Linux'
+        download_folder = os.path.expanduser('~')+'/Downloads/'
+        print 'The downloads folder is '+download_folder
+        browser = 'The browser is chromium-browser'
+        print browser
+    return download_folder
 
-#calls update again to run until program is exited out
-updateTweet ()
+def _findBrowser():
+    name_of_operating_system = os.name
+
+    #creates download_folder's path based off of os
+    if name_of_operating_system == 'nt':
+        print 'The operating System is Windows.'
+        browser = 'chrome.exe'
+        print 'The browser is ' + browser
+    else:
+        print 'The operating System is Linux'
+        browser = 'chromium-browser'
+        print 'The browser is ' + browser
+    return browser
+
+if __name__ == "__main__":
+    arg = sys.argv[1]
+    when = sys.argv[2]
+
+    browser = _findBrowser()
+
+    if arg == 'test':
+        desktop_path = os.path.expanduser('~')+'\Desktop\\'
+        config_file = desktop_path + 'test.yml'
+        time_to_tweet = MINUTE
+    elif arg == 'run':
+        config_file = 'config.yml'
+        time_to_tweet = HOUR
+
+    if when == 'hourly':
+         time_to_tweet = HOUR
+    elif when == 'now':
+        time_to_tweet = MINUTE
+
+    with open(config_file, 'r') as ymlfile:
+        cfg = yaml.safe_load(ymlfile)
+
+    while True:
+
+        now = time.time()
+        round(now)
+
+        #forces tweet to initiate on the hour
+        while now % time_to_tweet > EPSILON:
+            print 'Waiting to tweet.'
+            now = time.time()
+            round(now)
+            time.sleep(MINUTE / 2)
+
+        for bot in cfg:
+            consumer_key = cfg[bot]['consumer_key']
+            consumer_secret = cfg[bot]['consumer_secret']
+            access_key = cfg[bot]['access_key']
+            access_secret = cfg[bot]['access_secret']
+            coin_name = cfg[bot]['coin_name']
+            full_name = cfg[bot]['full_name']
+            download_folder = _findDownLoadsFolder()
+            increasing_color = cfg[bot]['increasing_color']
+            decreasing_color = cfg[bot]['decreasing_color']
+
+            print cfg
+
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(access_key, access_secret)
+            api = tweepy.API(auth)
+
+            bot = PriceBot(consumer_key, consumer_secret, access_key,
+                access_secret, coin_name, full_name, download_folder,
+                increasing_color, decreasing_color)
+
+            bot.plotTweet()
+            bot.updateTweet()
+
+        time.sleep( time_to_tweet / 2 )
+        #clears chrome window to avoid openning too many tabs and crashing system
+        if browser == 'chrome.exe':
+            Popen(['taskkill ', '/F',  '/IM', browser], shell=False)
+        elif browser == 'chromium-browser':
+            os.system('killall ' + browser)
+        else:
+            print 'Cannot find browser to kill.'
+            print browser
