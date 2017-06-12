@@ -5,6 +5,9 @@
 # The purpose of these twitter bots is to tweet the price data of different
 # cyrpto markets. The price data includes a 24hr market summary as well as a
 # candle stick OHCL chart of the past week.
+# -----------------------
+# Mitchell McKay
+# mmckay3@asu.edu
 
 import requests
 import time, datetime, threading, tweepy
